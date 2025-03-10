@@ -30,7 +30,6 @@ export default function RegisterModal({ isOpen, onClose }: RegisterModalProps) {
       })
 
       if(response.status === 200) {
-        console.log('aqui')
         toast("Conta criada com sucesso!", {
           description: "Agora você pode fazer login na plataforma.",
           action: {

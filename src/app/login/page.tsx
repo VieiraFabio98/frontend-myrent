@@ -60,15 +60,14 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-[#f5f5eae5]">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-[#CBDCEB] font-primary">
       <Toaster position="top-center"/>
       <main className="flex felx-col items-center justify-center w-full flex-1 px-20 text-center">
-        <div className="bg-[#F3F3E0] rounded-2xl shadow-2xl flex flex-row w-2/3 max-w-4xl">
-          <div className="w-3/5 p-5">
-            <div className="text-left font-bold text-2xl"><span className="text-[#608BC1]">My</span> Rent</div>
+        <div className="bg-primary rounded-2xl shadow-2xl flex flex-row w-3/4 max-w-4xl">
+          <div className="w-5/5 p-5">
             <div className="py-10">
-              <h2 className="text-3xl font-bold text-[#608BC1]">Login</h2>
-              <div className="border-2 w-30 border-[#608BC1] inline-block"></div>
+              <h2 className="text-3xl font-bold text-secondary">My Rent W</h2>
+              <div className="border-2 w-64 border-secondary-darker inline-block"></div>
               <div className="flex justify-center my-2">
                 <a href="" className="border-2 border-gray-200 rounded-full p-3 mx-1">
                   <FaFacebookF className="text-1xl " />
@@ -77,41 +76,43 @@ export default function Home() {
                   <FaGoogle className="text-1xl " />
                 </a>
               </div>
-              <p className="text-gray-400 my-3">ou use seu email</p>
+              <p className="text-gray-400 my-3">seu aluguel descomplicado</p>
               <div className="flex flex-col items-center">
-                <div className="w-64 py-2">
+                <div className="w-3/6 py-2 focus:outline-none">
                   <Input 
+                    className="h-10 border-secondary focus-visible:ring-secondary-darker focus-visible:border-none focus-visible:ring-2 transition-all duration-400 ease-in-out"
                     id="email" 
                     type="email" 
                     placeholder="Email"
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)}/>
                 </div>
-                <div className="w-64 py-2 mb-3">
+                <div className="w-3/6 py-2 mb-3">
                   <Input 
+                    className="h-10 border-secondary focus-visible:ring-secondary-darker focus-visible:border-none focus-visible:ring-2 transition-all duration-400 ease-in-out"
                     id="password" 
                     type="password" 
                     placeholder="Senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)} />
                 </div>
-                <div className="flex justify-between w-64 mb-5">
+                <div className="flex justify-between w-3/6 mb-5">
                   <label className="flex items-center text-xs"><Checkbox className="mr-1"></Checkbox>Lembre de mim</label>
                   <a href="#" className="text-xs hover:text-[#4A7BB8]">Esqueceu sua senha ?</a>
                 </div>
-                <div className="flex justify-between w-64 gap-x-4">
-                  <Button className="w-32 bg-[#608BC1] hover:bg-[#4A7BB8] transition-colors duration-100" onClick={handleLoginClick}>Entrar</Button>
-                  <Button className="w-32 bg-[#608BC1] hover:bg-[#4A7BB8] transition-colors duration-100" onClick={handleRegisterClick}>Cadastrar</Button>
+                <div className="flex justify-between w-3/6 gap-x-4">
+                  <Button className="flex-1 h-10 bg-secondary hover:bg-secondary-darker transition duration-300 hover:scale-105" onClick={handleLoginClick}>Entrar</Button>
+                  <Button className="flex-1 h-10 bg-secondary hover:bg-secondary-darker transition duration-300 hover:scale-105" onClick={handleRegisterClick}>Cadastrar</Button>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-2/5 bg-[#CBDCEB] text-white rounded-tr-2xl rounded-br-2xl py-36 px-12">
+          {/* <div className="w-2/5 bg-[#CBDCEB] text-white rounded-tr-2xl rounded-br-2xl py-36 px-12">
             <h2 className="text-2xl font-bold">Deseja criar uma conta ?</h2>
             <div className="border-2 w-25 border-white inline-block"></div>
             <p className="mb-2"></p>
             <Button className="bg-[#608BC1] hover:bg-[#4A7BB8] transition-colors duration-100" onClick={handleRegisterClick}>Cadastrar</Button>
-          </div>
+          </div> */}
         </div>
       </main>
 
