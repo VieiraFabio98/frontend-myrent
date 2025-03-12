@@ -68,14 +68,14 @@ export default function Home() {
             <div className="py-10">
               <h2 className="text-3xl font-bold text-secondary">My Rent W</h2>
               <div className="border-2 w-64 border-secondary-darker inline-block"></div>
-              <div className="flex justify-center my-2">
+              {/* <div className="flex justify-center my-2">
                 <a href="" className="border-2 border-gray-200 rounded-full p-3 mx-1">
                   <FaFacebookF className="text-1xl " />
                 </a>
                 <a href="" className="border-2 border-gray-200 rounded-full p-3 mx-1">
                   <FaGoogle className="text-1xl " />
                 </a>
-              </div>
+              </div> */}
               <p className="text-gray-400 my-3">seu aluguel descomplicado</p>
               <div className="flex flex-col items-center">
                 <div className="w-3/6 py-2 focus:outline-none">
