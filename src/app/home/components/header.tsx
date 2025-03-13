@@ -9,7 +9,7 @@ export default function Header({ activeTab, setActiveTab }: any) {
 
   return (
     <>
-      <header className="font-primary w-full h-[9vh] bg-secondary text-primary p-4 flex items-center justify-between">
+      <header className="font-primary w-full h-[9vh] bg-secondary text-primary p-4 flex items-center justify-between drop-shadow-sm">
         <button 
           onClick={() => router.push("/home")} 
           className="p-2 rounded-md hover:scale-120 transition"

@@ -15,9 +15,9 @@ export default function HomeLayout({
   const [activeTab, setActiveTab] = useState("")
   
   return (
-    <div>
+    <div className="h-screen flex flex-col">
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main>
+      <main className="bg-primary flex-1 min-h-0">
         <Page activeTab={activeTab} /> {/* Renderiza Page com activeTab */}
       </main>
       <Footer />
