@@ -35,7 +35,7 @@ export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) 
   const onSubmit = async () => {
     try {
       const formData = form.getValues()
-      const locatorId = localStorage.getItem('locatorID')
+      const locatorId = localStorage.getItem('locatorId')
       const payload = {...formData, locatorId: locatorId}
       const response = await request('post', '/renters', payload)
     } catch (e) {
