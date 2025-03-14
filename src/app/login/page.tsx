@@ -7,6 +7,16 @@ import { useState } from "react"
 import { useRouter } from 'next/navigation'
 import RegisterModal from "@/components/registerModal"
 import { Toaster } from "@/components/ui/sonner"
+import { request } from "@/services/api"
+
+interface ILoginData {
+  token: string
+  refreshToken: string
+  user: {
+    login: string
+    locatorId: string
+  }
+}
 
 export default function Home() {
   const router = useRouter()
@@ -16,28 +26,16 @@ export default function Home() {
   const [isRegisterModalOpen, setRegisterModalOpen] = useState(false)
 
   const handleLoginClick = async () => {
-    // const valid = validateLogin(email, password)
-   
-    // if(!valid) {
-    //   return
-    // }
-
     try {
-      console.log('aqui')
-      const response = await fetch("http://localhost:3333/sessions", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ login: email, password: btoa(password) })
-      })
-
-      if(response.status === 200) {
-        const data = await response.json()
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("refreshToken", data.refreshToken)
-        localStorage.setItem("user", JSON.stringify(data.user))
-      } else {
+      const payload = { login: email, password: btoa(password) }
+      const response: ILoginData = await request('post', '/sessions', payload)
+      
+      if(response) {
+        localStorage.setItem('token', response.token)
+        localStorage.setItem('refreshToken', response.refreshToken)
+        localStorage.setItem('login', response.user.login)
+        localStorage.setItem('locatorId', response.user.locatorId)
+        router.push("/home")
       }
     
     } catch(e) {
@@ -68,14 +66,6 @@ export default function Home() {
             <div className="py-10">
               <h2 className="text-3xl font-bold text-secondary">My Rent W</h2>
               <div className="border-2 w-64 border-secondary-darker inline-block"></div>
-              {/* <div className="flex justify-center my-2">
-                <a href="" className="border-2 border-gray-200 rounded-full p-3 mx-1">
-                  <FaFacebookF className="text-1xl " />
-                </a>
-                <a href="" className="border-2 border-gray-200 rounded-full p-3 mx-1">
-                  <FaGoogle className="text-1xl " />
-                </a>
-              </div> */}
               <p className="text-gray-400 my-3">seu aluguel descomplicado</p>
               <div className="flex flex-col items-center">
                 <div className="w-3/6 py-2 focus:outline-none">
