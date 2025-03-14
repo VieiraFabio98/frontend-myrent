@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import CustomInput from "./customInput"
 import { Toaster } from "./ui/sonner"
+import { request } from "@/services/api"
 
 export const formSchema = z.object({
   name: z.string().min(2, "Mínimo de caracteres - 2").max(50, "Máximo de caracteres - 50"),
@@ -18,7 +19,6 @@ export const formSchema = z.object({
   email: z.string().email("Email inválido"),
   phone: z.string().min(10, "Número de telefone inválido").max(11, "Número de telefone inválido"),
   mobilePhone: z.string().min(10, "Número de celular inválido").max(11, "Número de celular inválido"),
-
 })
 export type RenterFormData = z.infer<typeof formSchema>
 
@@ -32,8 +32,15 @@ export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) 
     resolver: zodResolver(formSchema),
   })
 
-  const onSubmit = async (data: RenterFormData) => {
-    console.log(data)
+  const onSubmit = async () => {
+    try {
+      const formData = form.getValues()
+      const locatorId = localStorage.getItem('locatorID')
+      const payload = {...formData, locatorId: locatorId}
+      const response = await request('post', '/renters', payload)
+    } catch (e) {
+      console.log(e)
+    }
   } 
 
   const onError = (errors: FieldErrors<RenterFormData>) => {
@@ -50,29 +57,9 @@ export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) 
 
   const handleRegisterClick = async() => {
     try {
-      const response = await fetch("http://localhost:3333/users", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(form.getValues())
-      })
-
-      if(response.status === 200) {
-        toast("Conta criada com sucesso!", {
-          description: "Agora você pode fazer login na plataforma.",
-          action: {
-            label: "Fechar",
-            onClick: () => toast.dismiss(),
-          },
-        })
-        onClose()
-
-        setTimeout(() => toast.dismiss(), 3000)
-        
-      } else {
-        console.log("Erro ao criar conta")
-      }
+      const data = form.getValues()
+      const response = await request('post', 'renters', data)
+      console.log(response)
 
     } catch (e) {
       console.log(e)

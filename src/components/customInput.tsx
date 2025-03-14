@@ -21,12 +21,12 @@ export default function CustomInput(props: CustomInputProps) {
     <div className={props.className}>
       <Label 
         htmlFor="terms"
-        className="text-md font-medium text-secondary mb-2 pl-1"
+        className="text-md font-medium text-secondary mb-2 pl-1 "
       >
         {props.label}
       </Label>
       <Input 
-        className="h-[3rem]" 
+        className="h-[3rem] border-secondary focus-visible:ring-secondary-darker focus-visible:border-none focus-visible:ring-2 transition-all duration-400 ease-in-out" 
         type={props.type} 
         {...props.form.register(props.formName)}
         disabled={props.isDisabled}
