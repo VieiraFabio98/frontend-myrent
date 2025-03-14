@@ -9,13 +9,15 @@ import { FieldErrors, useForm } from "react-hook-form"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import CustomInput from "./customInput"
+import { Toaster } from "./ui/sonner"
 
 export const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  lastName: z.string().min(2).max(50),
-  email: z.string().email(),
-  phone: z.string().min(10).max(11),
-  mobilePhone: z.string().min(10).max(11),
+  name: z.string().min(2, "Mínimo de caracteres - 2").max(50, "Máximo de caracteres - 50"),
+  lastName: z.string().min(2, "Mínimo de caracteres - 2").max(50, "Máximo de caracteres - 50"),
+  email: z.string().email("Email inválido"),
+  phone: z.string().min(10, "Número de telefone inválido").max(11, "Número de telefone inválido"),
+  mobilePhone: z.string().min(10, "Número de celular inválido").max(11, "Número de celular inválido"),
 
 })
 export type RenterFormData = z.infer<typeof formSchema>
@@ -36,11 +38,13 @@ export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) 
 
   const onError = (errors: FieldErrors<RenterFormData>) => {
     Object.entries(errors).forEach(([field, error]) => {
-      console.log(error)
-      // toast({
-      //   title: error?.message || "Corrija este campo",
-      //   variant: "destructive",
-      // })
+      toast.warning("Formulário Inválido", {
+        description: error?.message || "Corrija este campo.",
+        action: {
+          label: "Fechar",
+          onClick: () => toast.dismiss(),
+        },
+      })
     })
   }
 
@@ -80,42 +84,13 @@ export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) 
       <DialogContent className="p-6 bg-white rounded-lg shadow-xl font-primary w-[70%]">
         <DialogTitle className="text-lg font-semibold">Cadastrar Inquilino</DialogTitle>
         <form>
-         <div className="grid grid-cols-2 gap-5">
-          <Input
-              id="register-name"
-              type="text"
-              {...form.register("name")}
-              placeholder="name"
-              className="h-[3rem]"
-            />
-            <Input
-              id="register-last-name"
-              type="text"
-              placeholder="Last Name"
-              {...form.register("lastName")}
-              className="h-[3rem]"
-            />
-            <Input
-              id="register-password"
-              type="text"
-              placeholder="email"
-              {...form.register("email")}
-              className="h-[3rem]"
-            />
-            <Input
-              id="register-password"
-              type="text"
-              placeholder="phone"
-              {...form.register("email")}
-              className="h-[3rem]"
-            />
-            <Input
-              id="register-password"
-              type="text"
-              placeholder="mobilePhone"
-              {...form.register("email")}
-              className="h-[3rem]"
-            />
+         <Toaster theme="light" position="bottom-center"/>
+         <div className="grid grid-cols-2 gap-2">
+          <CustomInput label="Nome" type="text" formName="name" form={form} control={form.control} />
+          <CustomInput label="Sobrenome" type="text" formName="lastName" form={form} control={form.control} />
+          <CustomInput label="E-mail" type="text" formName="email" form={form} control={form.control} />
+          <CustomInput label="Telefone" type="text" formName="phone" form={form} control={form.control} />
+          <CustomInput label="Celular" type="text" formName="mobilePhone" form={form} control={form.control} />
          </div>
 
           <div className="grid grid-cols-2 gap-4 mt-4">
@@ -127,8 +102,6 @@ export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) 
             </DialogClose>
           </div>
         </form>
-
-        
       </DialogContent>
     </Dialog>
   )
