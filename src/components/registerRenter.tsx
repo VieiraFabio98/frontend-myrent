@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { FieldErrors, useForm } from "react-hook-form"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
@@ -22,15 +22,43 @@ export const formSchema = z.object({
 })
 export type RenterFormData = z.infer<typeof formSchema>
 
+interface IRentersResponse {
+  id: string
+  name: string
+  lastName: string
+  email: string
+  phone: string
+  mobilePhone: string
+}
+
 interface RegisterModalProps {
   isOpen: boolean
   onClose: () => void
+  selectRenterData?: IRentersResponse | null
 }
 
-export default function RegisterRenter({ isOpen, onClose }: RegisterModalProps) {
+export default function RegisterRenter({ isOpen, onClose, selectRenterData }: RegisterModalProps) {
+
+  const [name, setName] = useState(selectRenterData?.name || "")
+  const [email, setEmail] = useState(selectRenterData?.email || "")
+  const [phone, setPhone] = useState(selectRenterData?.phone || "")
+  const [mobilePhone, setMobilePhone] = useState(selectRenterData?.mobilePhone || "")
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
+
+  useEffect(() => {
+    if (selectRenterData) {
+      form.reset({
+        name: selectRenterData.name || "",
+        lastName:selectRenterData.lastName || "",
+        email: selectRenterData.email || "",
+        phone: selectRenterData.phone || "",
+        mobilePhone: selectRenterData.mobilePhone || "",
+      })
+    }
+  }, [selectRenterData, form.reset])
 
   const onSubmit = async () => {
     try {
