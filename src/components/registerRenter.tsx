@@ -43,6 +43,7 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
   const [email, setEmail] = useState(selectRenterData?.email || "")
   const [phone, setPhone] = useState(selectRenterData?.phone || "")
   const [mobilePhone, setMobilePhone] = useState(selectRenterData?.mobilePhone || "")
+  const [isEdit, setIsEdit] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,6 +51,8 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
 
   useEffect(() => {
     if (selectRenterData) {
+      console.log(selectRenterData)
+      setIsEdit(true)
       form.reset({
         name: selectRenterData.name || "",
         lastName:selectRenterData.lastName || "",
@@ -65,7 +68,7 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
       const formData = form.getValues()
       const locatorId = localStorage.getItem('locatorId')
       const payload = {...formData, locatorId: locatorId}
-      const response = await request('post', '/renters', payload)
+      const response = isEdit ? await request('put', `/renters/${selectRenterData?.id}`, payload) : await request('post', '/renters', payload)
     } catch (e) {
       console.log(e)
     }
@@ -87,8 +90,6 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
     try {
       const data = form.getValues()
       const response = await request('post', 'renters', data)
-      console.log(response)
-
     } catch (e) {
       console.log(e)
     }
@@ -110,7 +111,7 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
 
           <div className="grid grid-cols-2 gap-4 mt-4">
             <Button type="button" className="w-full bg-[#608BC1] hover:bg-[#4A7BB8] transition-colors duration-100" onClick={form.handleSubmit(onSubmit, onError)}>
-                Cadastrar
+                {isEdit ? "Atualizar" : "Cadastrar"}
               </Button>
             <DialogClose asChild>
               <Button className="w-full" variant="outline">Fechar</Button>
