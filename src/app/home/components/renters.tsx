@@ -9,18 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { request } from "@/services/api"
 import { PlusIcon } from "lucide-react"
 import { useEffect, useState } from "react"
+import { LoaderCircle } from "lucide-react"
 
 interface IRentersRequest {
   hasNext: boolean
@@ -72,7 +65,11 @@ export default function Renters() {
     fetchData() 
   }, []) 
 
-  if (loading) return <p>Carregando...</p>
+  if (loading) return (
+    <div className="fixed inset-0 flex items-center justify-center">
+      <LoaderCircle className="h-32 w-32 animate-spin" />
+    </div>
+  )
   if (error) return <p>Erro ao buscar os dados: {error}</p>
 
   const handleEditRenter = async (renterId: any) => {
