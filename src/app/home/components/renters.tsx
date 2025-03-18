@@ -57,8 +57,8 @@ export default function Renters() {
           "pageSize":"",
           "order":""
         }
-
-        const response: IRentersRequest = await request('post', '/renters/list', payload)
+        const locatorId = localStorage.getItem('locatorId')
+        const response: IRentersRequest = await request('post', `/renters/list/${locatorId}`, payload)
         setRenters(response.items)
       } catch (error) {
         console.error("Erro ao buscar dados:", error)

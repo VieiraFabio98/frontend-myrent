@@ -51,7 +51,6 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
 
   useEffect(() => {
     if (selectRenterData) {
-      console.log(selectRenterData)
       setIsEdit(true)
       form.reset({
         name: selectRenterData.name || "",
