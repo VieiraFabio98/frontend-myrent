@@ -1,17 +1,16 @@
 "use-client"
 
 import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { FieldErrors, useForm } from "react-hook-form"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import CustomInput from "./customInput"
 import { Toaster } from "./ui/sonner"
 import { request } from "@/services/api"
+
 
 export const formSchema = z.object({
   name: z.string().min(2, "Mínimo de caracteres - 2").max(50, "Máximo de caracteres - 50"),
@@ -35,14 +34,10 @@ interface RegisterModalProps {
   isOpen: boolean
   onClose: () => void
   selectRenterData?: IRentersResponse | null
+  onSuccess: () => void
 }
 
-export default function RegisterRenter({ isOpen, onClose, selectRenterData }: RegisterModalProps) {
-
-  const [name, setName] = useState(selectRenterData?.name || "")
-  const [email, setEmail] = useState(selectRenterData?.email || "")
-  const [phone, setPhone] = useState(selectRenterData?.phone || "")
-  const [mobilePhone, setMobilePhone] = useState(selectRenterData?.mobilePhone || "")
+export default function RegisterRenter({ isOpen, onClose, selectRenterData, onSuccess }: RegisterModalProps) {
   const [isEdit, setIsEdit] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -67,7 +62,16 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
       const formData = form.getValues()
       const locatorId = localStorage.getItem('locatorId')
       const payload = {...formData, locatorId: locatorId}
-      const response = isEdit ? await request('put', `/renters/${selectRenterData?.id}`, payload) : await request('post', '/renters', payload)
+      const response: any = isEdit ? 
+        await request('put', `/renters/${selectRenterData?.id}`, payload) 
+        : 
+        await request('post', '/renters', payload)
+    
+      if (response.statusCode === 200) {
+        form.reset()
+        onClose()
+        onSuccess()
+      }
     } catch (e) {
       console.log(e)
     }
@@ -83,15 +87,6 @@ export default function RegisterRenter({ isOpen, onClose, selectRenterData }: Re
         },
       })
     })
-  }
-
-  const handleRegisterClick = async() => {
-    try {
-      const data = form.getValues()
-      const response = await request('post', 'renters', data)
-    } catch (e) {
-      console.log(e)
-    }
   }
 
   return (

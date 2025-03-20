@@ -32,10 +32,15 @@ interface IRentersResponse {
 export default function Renters() {
   const [isRegisterRenterModalOpen, setRegisterRenterModalOpen] = useState(false)
   const [renters, setRenters] = useState<IRentersResponse[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loadingRequest, setLoadingRequest] = useState(true)
   const [error, setError] = useState(null)
   const [selectedRenter, setSelectedRenter] = useState<IRentersResponse| null>(null)
+  const [reload, setReload] = useState(false)
 
+  const triggerReload = () => {
+    setReload((prev) => !prev)
+    setLoadingRequest(true)
+  }
 
   const handleRegisterClick = () => {
     setRegisterRenterModalOpen(true)
@@ -57,15 +62,15 @@ export default function Renters() {
         console.error("Erro ao buscar dados:", error)
       } finally {
         setTimeout(() => {
-          setLoading(false)
+          setLoadingRequest(false)
         }, 500)
       }
     }
   
     fetchData() 
-  }, []) 
+  }, [reload]) 
 
-  if (loading) return (
+  if (loadingRequest) return (
     <div className="fixed inset-0 flex items-center justify-center">
       <LoaderCircle className="h-32 w-32 animate-spin" />
     </div>
@@ -133,6 +138,7 @@ export default function Renters() {
           setSelectedRenter(null)
         }} 
         selectRenterData={selectedRenter}
+        onSuccess={triggerReload}
       />
     </div>
   )

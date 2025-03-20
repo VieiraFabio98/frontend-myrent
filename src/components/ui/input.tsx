@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-//alterando a cor de seleciton para bg-secondary(azul)
+// alterando a cor de seleciton para bg-secondary(azul)
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input

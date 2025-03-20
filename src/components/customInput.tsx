@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "./ui/label"
 import React from "react"
-
 interface CustomInputProps {
   className?: string
   label?: string
@@ -14,6 +13,7 @@ interface CustomInputProps {
   onChangeDebounce?: (value: any) => void
   debounceDelay?: number
   removeRightRound?: boolean
+  mask?: string
 }
 
 export default function CustomInput(props: CustomInputProps) {
@@ -28,6 +28,7 @@ export default function CustomInput(props: CustomInputProps) {
       <Input 
         className="h-[3rem] border-secondary focus-visible:ring-secondary-darker focus-visible:border-none focus-visible:ring-2 transition-all duration-400 ease-in-out" 
         type={props.type} 
+        mask={props.mask}
         {...props.form.register(props.formName)}
         disabled={props.isDisabled}
         onInput={(e: React.FormEvent<HTMLInputElement>) => {
