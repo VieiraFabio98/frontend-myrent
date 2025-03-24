@@ -84,7 +84,8 @@ export default function Home() {
                     type="password" 
                     placeholder="Senha"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)} />
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleLoginClick()} />
                 </div>
                 <div className="flex justify-between w-3/6 mb-5">
                   <label className="flex items-center text-xs"><Checkbox className="mr-1"></Checkbox>Lembre de mim</label>
