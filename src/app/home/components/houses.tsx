@@ -1,26 +1,17 @@
+import RegisterHouse from "@/components/registerHouse";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { request } from "@/services/api";
+import { Label } from "@radix-ui/react-label";
+import { LoaderCircle, PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import RegisterRenter from "@/components/registerRenter"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { request } from "@/services/api"
-import { PlusIcon } from "lucide-react"
-import { useEffect, useState } from "react"
-import { LoaderCircle } from "lucide-react"
-
-interface IRentersRequest {
+interface IHousesRequest {
   hasNext: boolean
   items: any
 }
 
-interface IRentersResponse {
+interface IHousesResponse {
   id: string
   name: string
   lastName: string
@@ -29,12 +20,12 @@ interface IRentersResponse {
   mobilePhone: string
 }
 
-export default function Renters() {
-  const [isRegisterRenterModalOpen, setRegisterRenterModalOpen] = useState(false)
-  const [renters, setRenters] = useState<IRentersResponse[]>([])
+
+export default function Houses() {
+  const [isRegisterRenterModalOpen, setRegisterHousesModalOpen] = useState(false)
   const [loadingRequest, setLoadingRequest] = useState(true)
-  const [error, setError] = useState(null)
-  const [selectedRenter, setSelectedRenter] = useState<IRentersResponse| null>(null)
+  const [houses, setHouses] = useState<IHousesResponse[]>([])
+  const [selectedHouse, setSelectedHouse] = useState<IHousesResponse| null>(null)
   const [reload, setReload] = useState(false)
 
   const triggerReload = () => {
@@ -43,55 +34,47 @@ export default function Renters() {
   }
 
   const handleRegisterClick = () => {
-    setRegisterRenterModalOpen(true)
+    setRegisterHousesModalOpen(true)
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const payload = {
-          "search":"",
-          "page":"",
-          "pageSize":"",
-          "order":""
-        }
-        const locatorId = localStorage.getItem('locatorId')
-        const response: IRentersRequest = await request('post', `/renters/list/${locatorId}`, payload)
-        setRenters(response.items)
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error)
-      } finally {
-        setTimeout(() => {
-          setLoadingRequest(false)
-        }, 500)
-      }
-    }
-  
-    fetchData() 
-  }, [reload]) 
-
-  // if (loadingRequest) return (
-  //   <div className="fixed inset-0 flex items-center justify-center">
-  //     <LoaderCircle className="h-32 w-32 animate-spin" />
-  //   </div>
-  // )
-  if (error) return <p>Erro ao buscar os dados: {error}</p>
-
-  const handleEditRenter = async (renterId: any) => {
+  const handleEditHouse = async (renterId: any) => {
     try {
       const response: any = await request('get', `/renters/${renterId}`)
-      console.log(response)
+
       if(response.statusCode === 200) {
-        setSelectedRenter(response.data)
-        setRegisterRenterModalOpen(true)
+        setSelectedHouse(response.data)
+        setRegisterHousesModalOpen(true)
       }
 
     } catch(err){
       console.log(err)
     }
   }
-  
 
+  useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const payload = {
+            "search":"",
+            "page":"",
+            "pageSize":"",
+            "order":""
+          }
+          const locatorId = localStorage.getItem('locatorId')
+          const response: IHousesRequest = await request('post', `/renters/list/${locatorId}`, payload)
+          setHouses(response.items)
+        } catch (error) {
+          console.error("Erro ao buscar dados:", error)
+        } finally {
+          setTimeout(() => {
+            setLoadingRequest(false)
+          }, 500)
+        }
+      }
+    
+      fetchData() 
+    }, [reload])
+  
   return (
     <div className="font-primary flex flex-wrap justify-start">
       <div className="w-[25%]">
@@ -105,7 +88,7 @@ export default function Renters() {
             </div>
           </CardHeader>
           <CardContent className="transition-transform duration-200 group-hover:scale-110">
-            Adicionar Inquilino
+            Adicionar Casa
           </CardContent>
         </Card>
       </div>
@@ -115,7 +98,7 @@ export default function Renters() {
           <LoaderCircle className="h-32 w-32 animate-spin" />
         </div>
         ) : (
-        renters.map((renter, index) => (
+        houses.map((renter, index) => (
           <div key={index} className="p-0 w-[25%]">
             <Card className="m-4 h-48 group flex flex-col">
               <CardHeader className="px-0">
@@ -128,7 +111,7 @@ export default function Renters() {
                 <Label> Celular: {renter.mobilePhone}</Label>
               </CardContent>
               <CardFooter className="flex justify-around opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:h-56">
-                <Button variant="outline" onClick={() => handleEditRenter(renter.id)}>Editar</Button>
+                <Button variant="outline" onClick={() => handleEditHouse(renter.id)}>Editar</Button>
                 <Button variant="secondary">Info</Button>
                 <Button variant="outline">Excluir</Button>
               </CardFooter>
@@ -137,15 +120,16 @@ export default function Renters() {
         ))
       )}
 
-      <RegisterRenter 
+      <RegisterHouse
         isOpen={isRegisterRenterModalOpen} 
         onClose={() => {
-          setRegisterRenterModalOpen(false) 
-          setSelectedRenter(null)
+          setRegisterHousesModalOpen(false) 
+          setSelectedHouse(null)
         }} 
-        selectRenterData={selectedRenter}
+        selectHouseData={selectedHouse}
         onSuccess={triggerReload}
-      />
+        />
+      
     </div>
   )
 }
