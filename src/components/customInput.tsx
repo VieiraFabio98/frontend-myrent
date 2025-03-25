@@ -5,7 +5,7 @@ interface CustomInputProps {
   className?: string
   label?: string
   type?: string
-  formName?: "name" | "lastName" | "email" | "phone" | "mobilePhone"
+  formName?: any
   control?: any
   isDisabled?: boolean
   form?: any

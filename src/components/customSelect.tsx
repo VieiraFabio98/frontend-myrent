@@ -16,6 +16,7 @@ interface CustomSelectProps {
   isDisabled?: boolean
   form?: any
   options: { label: string; value: string }[]
+  onChange?: (value: string) => void
 }
 
 export default function CustomSelect(props: CustomSelectProps) {
@@ -29,7 +30,10 @@ export default function CustomSelect(props: CustomSelectProps) {
       </Label>
       <Select 
         disabled={props.isDisabled}
-        {...props.form.register(props.formName)}
+        onValueChange={(value) => {
+          props.form.setValue(props.formName, value)
+          props.onChange && props.onChange(value)
+        }}
       >
         <SelectTrigger className="w-full !h-[3rem] border-secondary focus-visible:ring-secondary-darker focus-visible:border-none focus-visible:ring-2 transition-all duration-400 ease-in-out">
           <SelectValue placeholder="Selecione..." />

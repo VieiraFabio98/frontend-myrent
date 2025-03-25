@@ -63,7 +63,6 @@ export default function CustomRequestSelect(props: CustomSelectProps) {
       </Label>
       <Select 
         disabled={props.isDisabled}
-        {...props.form.register(props.formName)}
         onValueChange={(value) => {
           props.form.setValue(props.formName, value)
           props.onChange && props.onChange(value)
@@ -76,7 +75,7 @@ export default function CustomRequestSelect(props: CustomSelectProps) {
         <SelectContent>
           <SelectGroup>
             {isLoading ? (
-              <SelectItem value="null" disabled>
+              <SelectItem value="blabla" disabled>
                 <div className="flex items-center gap-2">
                   <Loader2 className="animate-spin h-4 w-4" />
                   Carregando...
