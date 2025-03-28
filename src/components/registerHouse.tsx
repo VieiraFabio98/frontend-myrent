@@ -18,8 +18,8 @@ import CustomRequestSelect from "./customRequestSelect"
 export const formSchema = z.object({
   address: z.string().min(1).max(50),
   complement: z.string().min(1).max(50),
-  city: z.string().min(1).max(50),
-  state: z.string().min(1).max(50),
+  cityId: z.string().min(1).max(50),
+  stateId: z.string().min(1).max(50),
   zipCode: z.string().min(1).max(50),
   type: z.string().min(1).max(50),
   totalArea: z.string().min(1).max(50),
@@ -64,8 +64,8 @@ export default function RegisterHouse({ isOpen, onClose, selectHouseData, onSucc
       form.reset({
         address: selectHouseData.name || "",
         complement: selectHouseData.lastName || "",
-        city: selectHouseData.email || "",
-        state: selectHouseData.phone || "",
+        cityId: selectHouseData.email || "",
+        stateId: selectHouseData.phone || "",
         zipCode: selectHouseData.mobilePhone || "",
       })
     }
@@ -76,17 +76,17 @@ export default function RegisterHouse({ isOpen, onClose, selectHouseData, onSucc
       const formData = form.getValues()
       const locatorId = localStorage.getItem('locatorId')
       const payload = {...formData, locatorId: locatorId}
-      console.log(payload)
-      // const response: any = isEdit ? 
-      //   await request('put', `/houses/${selectHouseData?.id}`, payload) 
-      //   : 
-      //   await request('post', '/houses', payload)
+   
+      const response: any = isEdit ? 
+        await request('put', `/houses/${selectHouseData?.id}`, payload) 
+        : 
+        await request('post', '/houses', payload)
     
-      // if (response.statusCode === 200) {
-      //   form.reset()
-      //   onClose()
-      //   onSuccess()
-      // }
+      if (response.statusCode === 200) {
+        form.reset()
+        onClose()
+        onSuccess()
+      }
     } catch (e) {
       console.log(e)
     }
@@ -118,14 +118,14 @@ export default function RegisterHouse({ isOpen, onClose, selectHouseData, onSucc
             <CustomInput label="Complemento" type="text" formName="complement" form={form} control={form.control} />
             <CustomRequestSelect 
               label="Estado" 
-              formName="state" 
+              formName="stateId" 
               form={form} 
               url="/state" 
               onChange={(value) => setSelectedState(value)}
             />
             <CustomRequestSelect 
               label="Cidade" 
-              formName="city" 
+              formName="cityId" 
               form={form} 
               url={`/city/${selectedState}`}
             />

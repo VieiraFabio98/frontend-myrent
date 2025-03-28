@@ -61,7 +61,8 @@ export default function Houses() {
             "order":""
           }
           const locatorId = localStorage.getItem('locatorId')
-          const response: IHousesRequest = await request('post', `/renters/list/${locatorId}`, payload)
+          const response: IHousesRequest = await request('post', `/houses/list/${locatorId}`, payload)
+          console.log(response)
           setHouses(response.items)
         } catch (error) {
           console.error("Erro ao buscar dados:", error)
