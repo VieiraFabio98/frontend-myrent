@@ -34,19 +34,21 @@ export const formSchema = z.object({
 })
 export type HouseFormData = z.infer<typeof formSchema>
 
-interface IHousesResponse {
+interface IHousesResponseGet {
   id: string
-  name: string
-  lastName: string
-  email: string
-  phone: string
-  mobilePhone: string
+  address: string
+  type: string
+  status: string
+  complement: string
+  cityId: string
+  stateId: string
+  zipCode: string
 }
 
 interface RegisterModalProps {
   isOpen: boolean
   onClose: () => void
-  selectHouseData?: IHousesResponse | null
+  selectHouseData?: IHousesResponseGet | null
   onSuccess: () => void
 }
 
@@ -62,11 +64,11 @@ export default function RegisterHouse({ isOpen, onClose, selectHouseData, onSucc
     if (selectHouseData) {
       setIsEdit(true)
       form.reset({
-        address: selectHouseData.name || "",
-        complement: selectHouseData.lastName || "",
-        cityId: selectHouseData.email || "",
-        stateId: selectHouseData.phone || "",
-        zipCode: selectHouseData.mobilePhone || "",
+        address: selectHouseData.address || "",
+        complement: selectHouseData.complement || "",
+        cityId: selectHouseData.cityId || "",
+        stateId: selectHouseData.stateId || "",
+        zipCode: selectHouseData.zipCode || "",
       })
     }
   }, [selectHouseData, form.reset, selectedState])

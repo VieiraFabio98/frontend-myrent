@@ -10,22 +10,28 @@ interface IHousesRequest {
   hasNext: boolean
   items: any
 }
-
-interface IHousesResponse {
+interface IHousesBase {
   id: string
-  name: string
-  lastName: string
-  email: string
-  phone: string
-  mobilePhone: string
+  address: string
+  type: string
+  status: string
+}
+
+interface IHousesResponseList extends IHousesBase {}
+
+interface IHousesResponseGet extends IHousesBase {
+  complement: string
+  cityId: string
+  stateId: string
+  zipCode: string
 }
 
 
 export default function Houses() {
   const [isRegisterRenterModalOpen, setRegisterHousesModalOpen] = useState(false)
   const [loadingRequest, setLoadingRequest] = useState(true)
-  const [houses, setHouses] = useState<IHousesResponse[]>([])
-  const [selectedHouse, setSelectedHouse] = useState<IHousesResponse| null>(null)
+  const [houses, setHouses] = useState<IHousesResponseList[]>([])
+  const [selectedHouse, setSelectedHouse] = useState<IHousesResponseGet| null>(null)
   const [reload, setReload] = useState(false)
 
   const triggerReload = () => {
@@ -62,7 +68,6 @@ export default function Houses() {
           }
           const locatorId = localStorage.getItem('locatorId')
           const response: IHousesRequest = await request('post', `/houses/list/${locatorId}`, payload)
-          console.log(response)
           setHouses(response.items)
         } catch (error) {
           console.error("Erro ao buscar dados:", error)
@@ -99,20 +104,17 @@ export default function Houses() {
           <LoaderCircle className="h-32 w-32 animate-spin" />
         </div>
         ) : (
-        houses.map((renter, index) => (
+        houses.map((house, index) => (
           <div key={index} className="p-0 w-[25%]">
             <Card className="m-4 h-48 group flex flex-col">
               <CardHeader className="px-0">
-                <CardTitle className="mx-4 border-b border-secondary pb-1">{renter.name}</CardTitle>
-                <CardDescription className="mx-4">Algo</CardDescription>
+                <CardTitle className="mx-4 border-b border-secondary pb-1">{house.address}</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 gap-2">
-                <Label>Email: {renter.email}</Label>
-                <Label>Telefone: {renter.phone}</Label>
-                <Label> Celular: {renter.mobilePhone}</Label>
+                {/* <Label>Email: {house.email}</Label> */}
               </CardContent>
               <CardFooter className="flex justify-around opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:h-56">
-                <Button variant="outline" onClick={() => handleEditHouse(renter.id)}>Editar</Button>
+                <Button variant="outline" onClick={() => handleEditHouse(house.id)}>Editar</Button>
                 <Button variant="secondary">Info</Button>
                 <Button variant="outline">Excluir</Button>
               </CardFooter>
